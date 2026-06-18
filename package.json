@@ -1,0 +1,6 @@
+{
+  "name": "pettech-care-center",
+  "private": true,
+  "scripts": { "dev": "concurrently \"npm --prefix server run dev\" \"npm --prefix client run dev\"", "install:all": "npm install && npm --prefix client install && npm --prefix server install", "seed": "npm --prefix server run seed" },
+  "devDependencies": { "concurrently": "^9.1.2" }
+}

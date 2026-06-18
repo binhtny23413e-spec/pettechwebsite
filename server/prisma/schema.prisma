@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+enum Role {
+  CUSTOMER
+  STAFF
+  ADMIN
+}
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  phone String?
+  password String
+  role Role @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pets Pet[]
+  bookings Booking[]
+  journals CareJournal[]
+  memberships Membership[]
+}
+model Pet {
+  id Int @id @default(autoincrement())
+  ownerId Int
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name String
+  species String
+  breed String?
+  gender String?
+  age Int?
+  weight Float?
+  color String?
+  photoUrl String?
+  personality String?
+  preferences String?
+  specialNotes String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  healthRecords HealthRecord[]
+  bookings Booking[]
+  journals CareJournal[]
+  hotelStays PetHotelStay[]
+}
+model HealthRecord {
+  id Int @id @default(autoincrement())
+  petId Int
+  pet Pet @relation(fields: [petId], references: [id], onDelete: Cascade)
+  vaccineName String?
+  vaccineDate DateTime?
+  nextVaccineDate DateTime?
+  medicalHistory String?
+  allergies String?
+  chronicDiseases String?
+  medicationName String?
+  medicationTime String?
+  healthNotes String?
+  emergencyContact String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Booking {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  petId Int
+  pet Pet @relation(fields: [petId], references: [id])
+  serviceType String
+  date String
+  time String
+  note String?
+  status String @default("PENDING")
+  totalPrice Float
+  paymentStatus String @default("UNPAID")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  payment Payment?
+}
+model CareJournal {
+  id Int @id @default(autoincrement())
+  petId Int
+  pet Pet @relation(fields: [petId], references: [id])
+  staffId Int
+  staff User @relation(fields: [staffId], references: [id])
+  date DateTime @default(now())
+  feedingTime String?
+  foodAmount String?
+  medication String?
+  exercise String?
+  sleep String?
+  mood String?
+  healthStatus String?
+  photoUrl String?
+  videoUrl String?
+  staffNote String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model PetHotelStay {
+  id Int @id @default(autoincrement())
+  petId Int
+  pet Pet @relation(fields: [petId], references: [id])
+  roomNumber String
+  checkInDate DateTime
+  checkOutDate DateTime
+  feedingCount Int @default(0)
+  medicationStatus String?
+  healthStatus String?
+  dailyReport String?
+  status String @default("CHECKED_IN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Membership {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  planName String
+  price Float
+  discount Float
+  startDate DateTime
+  endDate DateTime
+  status String @default("ACTIVE")
+}
+model Payment {
+  id Int @id @default(autoincrement())
+  bookingId Int @unique
+  booking Booking @relation(fields: [bookingId], references: [id])
+  method String
+  amount Float
+  status String @default("PAID")
+  paidAt DateTime @default(now())
+}
+model KnowledgeArticle {
+  id Int @id @default(autoincrement())
+  title String
+  category String
+  summary String
+  content String
+  imageUrl String?
+  createdAt DateTime @default(now())
+}
