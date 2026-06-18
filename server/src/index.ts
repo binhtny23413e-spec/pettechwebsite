@@ -1,4 +1,4 @@
-import express from 'express';import cors from 'cors';import dotenv from 'dotenv';import bcrypt from 'bcryptjs';import jwt from 'jsonwebtoken';import {PrismaClient} from '@prisma/client';
+import express from 'express';import cors from 'cors';import dotenv from 'dotenv';import bcrypt from 'bcryptjs';import jwt from 'jsonwebtoken';import path from 'node:path';import {PrismaClient} from '@prisma/client';
 dotenv.config();const app=express();const prisma=new PrismaClient();const secret=process.env.JWT_SECRET||'pettech-demo-secret';app.use(cors());app.use(express.json());
 type Req=express.Request&{user?:any};const auth=async(req:Req,res:express.Response,next:express.NextFunction)=>{try{const token=req.headers.authorization?.replace('Bearer ','');if(!token)return res.status(401).json({message:'Vui lòng đăng nhập'});req.user=jwt.verify(token,secret);next()}catch{return res.status(401).json({message:'Phiên đăng nhập không hợp lệ'})}};
 app.get('/api/health',(_,res)=>res.json({status:'ok',service:'PetTech API'}));
@@ -29,5 +29,8 @@ app.get('/api/memberships',auth,async(req:Req,res)=>res.json(await prisma.member
 app.post('/api/memberships',auth,async(req:Req,res)=>res.status(201).json(await prisma.membership.create({data:{...req.body,userId:req.user.id}})));
 app.get('/api/admin/analytics',auth,(_,res)=>res.json({revenue:[210,260,245,330,390,472],bookings:1248,customers:862,pets:1036,occupancy:78,returningRate:64,topServices:['Pet Hotel','Grooming','Spa']}));
 app.get('/api/articles',async(_,res)=>res.json(await prisma.knowledgeArticle.findMany()));
+const clientDist=path.resolve(process.cwd(),'../client/dist');
+app.use(express.static(clientDist));
+app.use((req,res,next)=>{if(req.method==='GET'&&!req.path.startsWith('/api'))return res.sendFile(path.join(clientDist,'index.html'));next()});
 app.use((err:any,_:any,res:any,__:any)=>{console.error(err);res.status(500).json({message:'Máy chủ gặp lỗi, vui lòng thử lại'})});
 app.listen(Number(process.env.PORT)||4000,()=>console.log('🐾 PetTech API: http://localhost:4000'));

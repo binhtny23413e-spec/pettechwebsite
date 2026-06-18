@@ -42,3 +42,7 @@ npm --prefix client run dev
 Các nhóm endpoint: `/api/auth`, `/api/pets`, `/api/health-records`, `/api/bookings`, `/api/payments`, `/api/care-journals`, `/api/hotel-stays`, `/api/memberships`, `/api/admin/analytics` và `/api/articles`.
 
 Camera và thanh toán là mô phỏng đúng phạm vi demo; không thực hiện giao dịch hoặc truyền video thật.
+
+## Triển khai một URL công khai
+
+Dự án có sẵn `render.yaml` để triển khai frontend, backend và SQLite seed trong một Web Service. Trên Render, chọn **New Blueprint Instance**, kết nối repository này và áp dụng Blueprint. Sau khi hoàn tất, cả website và REST API cùng chạy trên một URL HTTPS.

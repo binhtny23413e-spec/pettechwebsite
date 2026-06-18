@@ -9,4 +9,5 @@ import './admin.css';
 import './hotel.css';
 import './about.css';
 import './about-overrides.css';
+import './theme.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode>);
