@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BarChart3, CalendarDays, CheckCircle2, CircleDollarSign, Clock3, PackageOpen, PawPrint, Search, Settings, Sparkles, TrendingUp, UserRound, Users, WalletCards } from 'lucide-react';
+import { BarChart3, CalendarDays, CheckCircle2, CircleDollarSign, Clock3, Hotel, PackageOpen, PawPrint, Search, Settings, Sparkles, TrendingUp, UserRound, Users, WalletCards } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 
 type Order={id:number;serviceType:string;date:string;time:string;note?:string;status:string;paymentStatus:string;totalPrice:number;subtotal?:number;vat?:number;hotelCheckIn?:string;hotelCheckOut?:string;hotelDays?:number;user?:{name:string};pet?:{name:string};payment?:{method:string;amount:number;status:string};demo?:boolean};
 const statusText:Record<string,string>={PENDING:'Chờ xác nhận',CONFIRMED:'Đã xác nhận',IN_PROGRESS:'Đang phục vụ',COMPLETED:'Hoàn thành',CANCELLED:'Đã hủy'};
 const money=(n:number)=>`${Math.round(n).toLocaleString('vi-VN')}đ`;
-const nav=[[BarChart3,'Tổng quan','/admin'],[CalendarDays,'Đơn hàng','/admin/orders'],[Users,'Khách hàng','/admin/customers'],[PawPrint,'Thú cưng','/admin/pets'],[UserRound,'Nhân viên & Ca làm','/admin/staff'],[PackageOpen,'Kho sản phẩm','/admin/inventory'],[CircleDollarSign,'Doanh thu','/admin/finance'],[WalletCards,'Chi phí','/admin/expenses'],[Sparkles,'Combo','/admin/memberships'],[TrendingUp,'Analytics','/admin/analytics']];
+const nav=[[BarChart3,'Tổng quan','/admin'],[CalendarDays,'Đơn hàng','/admin/orders'],[Users,'Khách hàng','/admin/customers'],[PawPrint,'Thú cưng','/admin/pets'],[UserRound,'Nhân viên & Ca làm','/admin/staff'],[Hotel,'Pet Hotel','/admin/hotel'],[PackageOpen,'Kho sản phẩm','/admin/inventory'],[CircleDollarSign,'Doanh thu','/admin/finance'],[WalletCards,'Chi phí','/admin/expenses'],[Sparkles,'Combo','/admin/memberships'],[TrendingUp,'Analytics','/admin/analytics']];
 const samples:Order[]=[
   {id:-1001,user:{name:'Nguyễn Minh Anh'},pet:{name:'Mochi'},serviceType:'Grooming · Gold × 1',date:'2026-06-20',time:'09:30',status:'CONFIRMED',paymentStatus:'PAID',totalPrice:236520,payment:{method:'MoMo',amount:236520,status:'PAID'},demo:true},
   {id:-1002,user:{name:'Quang Huy'},pet:{name:'Bella'},serviceType:'Pet Hotel · Gold × 3 ngày',date:'2026-06-20',time:'08:00',hotelCheckIn:'2026-06-20',hotelCheckOut:'2026-06-23',hotelDays:3,subtotal:1167000,vat:93360,status:'IN_PROGRESS',paymentStatus:'PAID',totalPrice:1260360,payment:{method:'ZaloPay',amount:1260360,status:'PAID'},demo:true},
   {id:-1003,user:{name:'Thảo Vy'},pet:{name:'Bông'},serviceType:'Spa · Premium × 1',date:'2026-06-19',time:'13:30',status:'COMPLETED',paymentStatus:'PAID',totalPrice:452520,payment:{method:'Thẻ ngân hàng',amount:452520,status:'PAID'},demo:true},
-  {id:-1004,user:{name:'Mai Linh'},pet:{name:'Mây'},serviceType:'Combo Sạch Xinh · Combo × 1',date:'2026-06-21',time:'15:00',status:'PENDING',paymentStatus:'UNPAID',totalPrice:301320,payment:{method:'Tiền mặt tại cửa hàng',amount:301320,status:'UNPAID'},demo:true},
-  {id:-1005,user:{name:'Tuấn Khang'},pet:{name:'Milo'},serviceType:'Combo Khỏe & Đẹp · Combo × 1',date:'2026-06-22',time:'11:00',status:'CONFIRMED',paymentStatus:'PAID',totalPrice:506520,payment:{method:'MoMo',amount:506520,status:'PAID'},demo:true}
+  {id:-1004,user:{name:'Mai Linh'},pet:{name:'Mây'},serviceType:'Combo Sạch Xinh · Combo × 1',date:'2026-06-21',time:'15:00',status:'PENDING',paymentStatus:'UNPAID',subtotal:219000,vat:17520,totalPrice:236520,payment:{method:'Tiền mặt tại cửa hàng',amount:236520,status:'UNPAID'},demo:true},
+  {id:-1005,user:{name:'Tuấn Khang'},pet:{name:'Milo'},serviceType:'Combo Khỏe & Đẹp · Combo × 1',date:'2026-06-22',time:'11:00',status:'CONFIRMED',paymentStatus:'PAID',subtotal:249000,vat:19920,totalPrice:268920,payment:{method:'MoMo',amount:268920,status:'PAID'},demo:true}
 ];
 
 export default function LiveAdminOrders(){

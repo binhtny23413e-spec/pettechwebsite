@@ -18,12 +18,11 @@ export function ServiceDetail(){const {slug}=useParams();const s=serviceData.fin
 export function Pricing(){return <><PageHero tag="BẢNG GIÁ THEO CẤP ĐỘ" title="Chọn đúng mức chăm sóc, trả đúng giá trị" desc="Silver tiết kiệm cho nhu cầu cơ bản, Gold cân bằng quyền lợi, Premium dành cho trải nghiệm toàn diện."/><section className="section pricing-detail"><div className="pricing-legend"><span><b>Silver</b> Tiết kiệm, đủ nhu cầu cơ bản</span><span><b>Gold</b> Nâng cao, được chọn nhiều nhất</span><span><b>Premium</b> Chăm sóc toàn diện</span></div>{serviceData.map(s=>{const I=s.icon;return <div className="pricing-service"><div className="pricing-name"><I/><div><h3>{s.name}</h3><p>{s.duration}</p></div><Button to={`/services/${s.slug}`} variant="text">Xem chi tiết</Button></div><div className="pricing-tiers">{s.tiers.map((t,i)=><div className={i===1?'best':''}><span>{t[0]}</span><b>{t[1]}</b><p>{t[2]}</p><Button to="/booking" variant={i===1?'primary':'outline'}>Chọn gói</Button></div>)}</div></div>})}</section></>}
 
 const combos=[
- ['Combo Sạch Xinh','Grooming Silver + Spa Silver','279.000đ','318.000đ','Tiết kiệm 39.000đ'],
- ['Combo Tỏa Sáng','Grooming Gold + Spa Gold','459.000đ','518.000đ','Tiết kiệm 59.000đ'],
- ['Combo Kỳ Nghỉ An Tâm','3 ngày Pet Hotel Gold + 1 Grooming','1.299.000đ','1.386.000đ','Tiết kiệm 87.000đ'],
- ['Combo Khỏe & Đẹp','Khám sức khỏe Gold + Grooming Gold','469.000đ','518.000đ','Tiết kiệm 49.000đ'],
- ['Combo Đón Tận Nhà','Đưa đón 2 chiều + Spa Gold','399.000đ','438.000đ','Tiết kiệm 39.000đ'],
- ['Combo Premium Day','Grooming Premium + Spa Premium + đưa đón','859.000đ','957.000đ','Tiết kiệm 98.000đ']
+ ['Combo Sạch Xinh','Grooming Silver + Spa Silver','219.000đ','238.000đ','Tiết kiệm 19.000đ'],
+ ['Combo Tỏa Sáng','Grooming Gold + Spa Gold','479.000đ','518.000đ','Tiết kiệm 39.000đ'],
+ ['Combo Kỳ Nghỉ An Tâm','3 ngày Pet Hotel Gold + 1 Grooming Gold','1.349.000đ','1.386.000đ','Tiết kiệm 37.000đ'],
+ ['Combo Khỏe & Đẹp','Sản phẩm tẩy giun phổ thông theo hướng dẫn nhà sản xuất + Grooming Gold','249.000đ','308.000đ','Tiết kiệm 59.000đ'],
+ ['Combo Premium Day','Grooming Premium + Spa Premium + sản phẩm tẩy giun phổ thông theo hướng dẫn nhà sản xuất','739.000đ','827.000đ','Tiết kiệm 88.000đ']
 ];
 export function Membership(){return <><PageHero tag="COMBO CHĂM SÓC" title="Kết hợp nhiều dịch vụ, tiết kiệm nhiều hơn" desc="Không cần mua membership khó hiểu — chọn combo theo đúng nhu cầu và thời gian chăm sóc của bé."/><section className="section combo-section"><SectionTitle eyebrow="COMBO DỊCH VỤ" title="Một lần đặt, trọn gói yêu thương"/><div className="combo-grid">{combos.map((c,i)=><div className={i===1?'combo featured':'combo'}><span>{i===1?'PHỔ BIẾN':'COMBO'}</span><h3>{c[0]}</h3><p>{c[1]}</p><div><b>{c[2]}</b><del>{c[3]}</del></div><em>{c[4]}</em><Button to="/booking" variant={i===1?'primary':'outline'}>Chọn combo</Button></div>)}</div></section><section className="section duration-plans"><SectionTitle eyebrow="ĐĂNG KÝ THEO KỲ" title="Càng đồng hành lâu, giá càng tốt" desc="Áp dụng cho mọi combo chăm sóc định kỳ; quyền lợi được sử dụng linh hoạt trong thời hạn."/><div className="duration-grid">{[['3 tháng','Giảm 5%','Tặng 1 lần tư vấn online'],['6 tháng','Giảm 10%','Tặng 1 lần đưa đón một chiều'],['12 tháng','Giảm 15%','Tặng 1 Grooming Silver + ưu tiên lịch']].map((x,i)=><div className={i===2?'featured':''}><CalendarDays/><h3>{x[0]}</h3><b>{x[1]}</b><p>{x[2]}</p><Button to="/booking" variant={i===2?'primary':'outline'}>Đăng ký</Button></div>)}</div></section></>}
 
