@@ -9,6 +9,7 @@ export default function InteractionRouter(){
    const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let node;
    while(node=walker.nextNode()){if(node.nodeValue?.includes('PetTech')||node.nodeValue?.includes('PETTECH'))node.nodeValue=node.nodeValue.replace(/PetTech/g,'PAWFECT').replace(/PETTECH/g,'PAWFECT')}
    if(location.pathname.startsWith('/admin'))document.querySelectorAll<HTMLAnchorElement>('aside a.side-link').forEach(link=>link.classList.toggle('active',new URL(link.href).pathname===location.pathname));
+   if(location.pathname.startsWith('/customer'))document.querySelectorAll<HTMLAnchorElement>('aside a.side-link').forEach(link=>{const path=new URL(link.href).pathname;const exact=path===location.pathname;const petChild=path==='/customer/pets'&&location.pathname.startsWith('/customer/pets/');link.classList.toggle('active',exact||petChild)});
   };
   sync();const observer=new MutationObserver(sync);observer.observe(document.body,{childList:true,subtree:true});
   const click=(event:MouseEvent)=>{
