@@ -40,13 +40,13 @@ export default function CartPage(){
     setConfirmation(snapshot); clear();
   };
 
-  if(confirmation)return <main className="cart-page cart-success"><div className="cart-success-card">
-    <CheckCircle2/><span>ĐẶT DỊCH VỤ THÀNH CÔNG</span><h1>Cảm ơn bạn đã chọn PAWFECT!</h1>
+  if(confirmation)return <main className="cart-page payment-success-page"><div className="payment-success-overlay" role="dialog" aria-modal="true" aria-labelledby="payment-success-title"><div className="cart-success-card">
+    <CheckCircle2/><span>THANH TOÁN THÀNH CÔNG</span><h1 id="payment-success-title">Cảm ơn bạn đã chọn PAWFECT!</h1>
     <p>Mã đơn hàng <b>#{confirmation.code}</b>. Thông tin lịch hẹn đã được ghi nhận.</p>
     <div className="cart-confirm-lines">{confirmation.lines.map(line=><p key={line}><PawPrint/><span>{line}</span></p>)}</div>
     <Totals subtotal={confirmation.subtotal}/>
     <div className="cart-success-actions"><Link className="btn outline" to="/services">Mua tiếp</Link><Link className="btn primary" to="/">Quay lại trang chủ</Link></div>
-  </div></main>;
+  </div></div></main>;
 
   if(!items.length)return <main className="cart-page cart-empty"><div><ShoppingBag/><h1>Giỏ hàng đang trống</h1><p>Chọn dịch vụ hoặc combo phù hợp cho bé, sản phẩm sẽ xuất hiện tại đây.</p><div><Link className="btn primary" to="/services">Xem dịch vụ</Link><Link className="btn outline" to="/membership">Xem combo tiết kiệm</Link></div></div></main>;
 
