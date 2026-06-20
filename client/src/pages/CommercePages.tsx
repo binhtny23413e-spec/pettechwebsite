@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Check, Clock3, HeartPulse, Hotel, PackageOpen, Scissors, Shield, ShoppingBag, Sparkles, X } from 'lucide-react';
 import { Button, Img, SectionTitle } from '../components/UI';
 import { useCart } from '../components/CartContext';
+import { readInventory, recordSale } from '../components/inventoryStore';
 
 export const serviceData=[
  {slug:'grooming',name:'Grooming',desc:'Tắm, sấy, vệ sinh và cắt tỉa theo giống.',icon:Scissors,image:'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1000&q=85',duration:'60–120 phút',tiers:[['Silver','119.000đ','Tắm, sấy, vệ sinh tai và cắt móng'],['Gold','219.000đ','Silver + cắt tỉa tạo kiểu, dưỡng lông'],['Premium','319.000đ','Gold + massage, phục hồi lông chuyên sâu']]},
@@ -11,7 +12,7 @@ export const serviceData=[
  {slug:'health-care',name:'Chăm sóc sức khỏe',desc:'Khám tổng quát và theo dõi sức khỏe định kỳ.',icon:HeartPulse,image:'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=1000&q=85',duration:'30–60 phút',tiers:[['Silver','189.000đ','Khám tổng quát cơ bản'],['Gold','299.000đ','Khám tổng quát + tư vấn dinh dưỡng'],['Premium','499.000đ','Gold + xét nghiệm cơ bản, hồ sơ sức khỏe số + sổ giun']]}
 ];
 
-const productGroups=[
+export const productGroups=[
  {code:'G',title:'Dinh dưỡng & bổ sung',total:'926.000đ',items:[
   [42,'Gel dinh dưỡng phổ thông','Gel dinh dưỡng Nuvita chó mèo 120g','Tuýp',99000,'Bán theo nhu cầu khách, không thay thế tư vấn thú y.'],
   [43,'Gel dinh dưỡng cao cấp','Virbac Nutri-Plus Gel 120g','Tuýp',329000,'Dòng cao cấp, nên nhập ít để tránh tồn kho.'],
@@ -39,10 +40,9 @@ const productGroups=[
 ];
 
 function ProductCatalog(){
- const initialInventory:Record<number,number>={42:18,43:7,44:14,45:6,46:22,47:11,48:5,49:31,50:9,51:13,52:8,53:4,54:16,55:12,56:7,57:5,58:24,59:15};
- const [open,setOpen]=useState(false);const [group,setGroup]=useState('G');const [inventory,setInventory]=useState(initialInventory);const {addItem}=useCart();const navigate=useNavigate();
+ const [open,setOpen]=useState(false);const [group,setGroup]=useState('G');const [inventory,setInventory]=useState(()=>readInventory().stock);const {addItem}=useCart();const navigate=useNavigate();
  const shown=productGroups.filter(x=>x.code===group);
- const add=(row:any[])=>{const id=Number(row[0]);let user:any=null;try{user=JSON.parse(localStorage.getItem('user')||'null')}catch{}if(!localStorage.getItem('token')||user?.role!=='CUSTOMER'){navigate('/login');return}if((inventory[id]||0)<=0)return;addItem({id:`product-${id}`,name:String(row[2]),variant:String(row[3]),price:Number(row[4]),description:String(row[1])});setInventory(old=>({...old,[id]:Math.max(0,(old[id]||0)-1)}))};
+ const add=(row:any[])=>{const id=Number(row[0]);let user:any=null;try{user=JSON.parse(localStorage.getItem('user')||'null')}catch{}if(!localStorage.getItem('token')||user?.role!=='CUSTOMER'){navigate('/login');return}if((inventory[id]||0)<=0)return;addItem({id:`product-${id}`,name:String(row[2]),variant:String(row[3]),price:Number(row[4]),description:String(row[1])});setInventory(recordSale(id,Number(row[4])).stock)};
  const stock=(id:number)=>inventory[id]||0;
  return <><button className="service-card service-card-link product-service-card" onClick={()=>setOpen(true)}><div className="service-image"><Img src="https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=900&q=85" alt="Sản phẩm dinh dưỡng và chăm sóc thú cưng"/><span><ShoppingBag/></span></div><div><h3>Sản phẩm chăm sóc</h3><p>Dinh dưỡng, kiểm soát ký sinh trùng và vệ sinh tai tại nhà.</p><p className="duration"><PackageOpen/> 18 sản phẩm chính hãng</p><b>Từ 75.000đ</b></div></button>{open&&<div className="product-popup" onClick={()=>setOpen(false)}><div onClick={e=>e.stopPropagation()}><button className="product-popup-close" onClick={()=>setOpen(false)}><X/></button><span className="eyebrow">DANH MỤC SẢN PHẨM CHĂM SÓC</span><h2>Dinh dưỡng và chăm sóc tại nhà</h2><p>Sử dụng theo đúng cân nặng, nhu cầu và hướng dẫn nhà sản xuất; không thay thế chẩn đoán hoặc điều trị thú y.</p><div className="product-filter">{productGroups.map(x=><button className={group===x.code?'active':''} onClick={()=>setGroup(x.code)} key={x.code}><span><b>{x.title}</b><small>{x.items.length} sản phẩm</small></span></button>)}</div>{shown.map(g=><div className="product-group" key={g.code}><div className="product-group-head"><PackageOpen/><div><h3>{g.title}</h3><p>{g.items.length} sản phẩm · Tổng giá tham khảo: <b>{g.total}</b></p></div></div><div className="product-table-wrap"><table><thead><tr><th>Loại sản phẩm</th><th>Tên sản phẩm</th><th>Quy cách</th><th>Giá</th><th>Tồn kho</th><th>Lưu ý</th><th></th></tr></thead><tbody>{g.items.map((row:any[])=><tr key={row[0]}><td><b>{row[1]}</b></td><td>{row[2]}</td><td>{row[3]}</td><td><strong>{Number(row[4]).toLocaleString('vi-VN')}đ</strong></td><td><span className={`product-stock ${stock(Number(row[0]))<=5?'low':''}`}>{stock(Number(row[0]))>0?`Còn ${stock(Number(row[0]))} sản phẩm`:'Hết hàng'}</span></td><td><small>{row[5]}</small></td><td><button disabled={stock(Number(row[0]))===0} onClick={()=>add(row)}><ShoppingBag/> {stock(Number(row[0]))===0?'Hết hàng':'Thêm vào giỏ'}</button></td></tr>)}</tbody></table></div></div>)}</div></div>}</>
 }

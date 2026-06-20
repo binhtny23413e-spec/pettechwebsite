@@ -1,0 +1,9 @@
+.staff-inventory-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:15px}
+.staff-inventory-summary>div{display:flex;align-items:center;gap:12px;padding:17px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.staff-inventory-summary svg{padding:9px;width:40px;height:40px;border-radius:10px;background:#e7f7f4;color:var(--teal)}
+.staff-inventory-summary span{display:flex;flex-direction:column;font-size:9px;color:var(--muted)}
+.staff-inventory-summary b{font-size:16px;color:var(--dark);margin-top:4px}
+.staff-inventory-table{overflow:auto}.staff-inventory-table table{min-width:950px}
+@media(max-width:700px){.staff-inventory-summary{grid-template-columns:1fr}}
+[data-theme="dark"] .staff-inventory-summary>div{background:#132f3d}[data-theme="dark"] .staff-inventory-summary b{color:#e7f1f4}
+.dash .inventory-layout>aside.inventory-top{position:static;inset:auto;width:auto;display:block;padding:20px;border-right:0;overflow:visible}

@@ -14,6 +14,8 @@ import './theme.css';
 import './commerce.css';
 import './commerce-overrides.css';
 import './product-popup.css';
+import './inventory.css';
+import './staff-inventory.css';
 import './cart.css';
 import './hotel-tracking.css';
 import './staff-portal.css';

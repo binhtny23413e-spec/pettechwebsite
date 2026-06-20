@@ -16,12 +16,13 @@ export default function InteractionRouter(){
    const anchor=(event.target as HTMLElement).closest('a.side-link');
    if(anchor&&window.location.pathname==='/admin'){
     const label=anchor.textContent?.trim()||'';
-    const adminRoutes:Record<string,string>={'Khách hàng':'/admin/customers','Thú cưng':'/admin/pets','Booking':'/admin/orders','Đơn hàng':'/admin/orders','Nhân viên & Ca làm':'/admin/staff','Pet Hotel':'/admin/hotel','Doanh thu':'/admin/finance','Chi phí':'/admin/expenses','Membership':'/admin/memberships','Combo':'/admin/memberships','Analytics':'/admin/analytics'};
+    const adminRoutes:Record<string,string>={'Khách hàng':'/admin/customers','Thú cưng':'/admin/pets','Booking':'/admin/orders','Đơn hàng':'/admin/orders','Nhân viên & Ca làm':'/admin/staff','Pet Hotel':'/admin/hotel','Kho sản phẩm':'/admin/inventory','Doanh thu':'/admin/finance','Chi phí':'/admin/expenses','Membership':'/admin/memberships','Combo':'/admin/memberships','Analytics':'/admin/analytics'};
     if(adminRoutes[label]){event.preventDefault();navigate(adminRoutes[label]);return}
    }
    const button=(event.target as HTMLElement).closest('button');if(!button)return;
-   if(window.location.pathname.startsWith('/staff')||window.location.pathname.startsWith('/admin'))return;
    const text=button.textContent?.trim()||'';
+   if(window.location.pathname==='/staff'&&text.includes('Kho sản phẩm')){event.preventDefault();navigate('/staff/inventory');return}
+   if(window.location.pathname.startsWith('/staff')||window.location.pathname.startsWith('/admin'))return;
    const routes:Record<string,string>={'Thêm thú cưng':'/customer/pets/new','Đặt lịch mới':'/pricing','Hồ sơ sức khỏe':'/customer/health','Nhật ký chăm sóc':'/customer/journal','Lịch sử thanh toán':'/customer/payments','Xem nhật ký':'/customer/journal','Xem toàn màn hình':'/customer/camera','Cài đặt':'/customer/settings'};
    const exact=Object.keys(routes).find(k=>text.includes(k));if(exact){event.preventDefault();navigate(routes[exact]);return}
    if(text.includes('Chỉnh sửa')||text.includes('Xem chi tiết')){const card=button.closest('.pet-manage-card');const name=card?.querySelector('h3')?.textContent?.trim().toLowerCase()||'mochi';navigate(`/customer/pets/${name}${text.includes('Chỉnh sửa')?'/edit':''}`)}
