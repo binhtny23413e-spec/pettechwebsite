@@ -35,7 +35,7 @@ export default function CartPage(){
     if(!localStorage.getItem('token')){setCheckoutError('Vui lòng đăng nhập trước khi xác nhận để đơn hàng được đồng bộ sang trang quản trị.');return}
     const lines=items.map(item=>`${item.name} · ${item.variant} × ${item.quantity}${item.name==='Pet Hotel'?` ngày (${hotelStay.checkIn} → ${hotelStay.checkOut})`:''}`);
     const snapshot={code:`PF-${Date.now().toString().slice(-6)}`,subtotal,vat,total,lines};
-    try{await api('/bookings',{method:'POST',body:JSON.stringify({...data,service:lines.join(', '),subtotal,vat,totalPrice:total})})}catch(e:any){setCheckoutError(e.message||'Chưa thể tạo đơn hàng. Vui lòng thử lại.');return}
+    try{await api('/bookings',{method:'POST',body:JSON.stringify({...data,service:lines.join(', '),subtotal,vat,totalPrice:total,hotelCheckIn:hotelItems.length?hotelStay.checkIn:null,hotelCheckOut:hotelItems.length?hotelStay.checkOut:null,hotelDays:hotelItems.length?hotelDays:null})})}catch(e:any){setCheckoutError(e.message||'Chưa thể tạo đơn hàng. Vui lòng thử lại.');return}
     setConfirmation(snapshot); clear();
   };
 

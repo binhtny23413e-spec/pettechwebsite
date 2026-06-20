@@ -75,6 +75,11 @@ model Booking {
   note String?
   status String @default("PENDING")
   totalPrice Float
+  subtotal Float?
+  vat Float?
+  hotelCheckIn String?
+  hotelCheckOut String?
+  hotelDays Int?
   paymentStatus String @default("UNPAID")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
