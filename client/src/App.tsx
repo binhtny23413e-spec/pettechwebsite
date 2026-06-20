@@ -10,7 +10,8 @@ import AboutPage from './pages/AboutPage';
 import { Booking, Login } from './pages/AuthBooking';
 import { AdminDashboard, CustomerDashboard, CustomerFeature, StaffDashboard } from './pages/Dashboards';
 import { CustomerSettings, PetDetail, PetForm } from './pages/CustomerPetPages';
-import { AdminAnalytics, AdminEntities, AdminExpenses, AdminFinance, AdminOrders, AdminSettings } from './pages/AdminPages';
+import { AdminAnalytics, AdminEntities, AdminExpenses, AdminFinance, AdminSettings } from './pages/AdminPages';
+import AdminOrders from './pages/LiveAdminOrders';
 import CartPage from './pages/CartPage';
 export default function App(){return <><InteractionRouter/><ThemeToggle/><FloatingCart/><Routes>
   <Route element={<Layout/>}><Route path="/" element={<Home/>}/><Route path="/about" element={<AboutPage/>}/><Route path="/services" element={<Services/>}/><Route path="/services/:slug" element={<ServiceDetail/>}/><Route path="/pricing" element={<Pricing/>}/><Route path="/membership" element={<Membership/>}/><Route path="/knowledge" element={<Knowledge/>}/><Route path="/knowledge/:slug" element={<ArticleDetail/>}/></Route>
