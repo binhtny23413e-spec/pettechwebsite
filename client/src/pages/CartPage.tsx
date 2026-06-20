@@ -21,7 +21,8 @@ export default function CartPage(){
   const [step,setStep]=useState(1);
   const [data,setData]=useState({petType:'Mèo',pet:'Mochi · Scottish Fold',date:'2026-06-20',time:'09:30',note:'',method:'MoMo'});
   const [checkoutError,setCheckoutError]=useState('');
-  const [hotelStay,setHotelStay]=useState({checkIn:'2026-06-20',checkOut:'2026-06-21'});
+  const firstHotel=items.find(item=>item.name==='Pet Hotel');
+  const [hotelStay,setHotelStay]=useState({checkIn:firstHotel?.hotelCheckIn||'2026-06-20',checkOut:firstHotel?.hotelCheckOut||'2026-06-21'});
   const [confirmation,setConfirmation]=useState<null|{code:string;subtotal:number;vat:number;total:number;lines:string[]}>(null);
   const subtotal=useMemo(()=>items.reduce((sum,item)=>sum+item.price*item.quantity,0),[items]);
   const vat=Math.round(subtotal*.08);
