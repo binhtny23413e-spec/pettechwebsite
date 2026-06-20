@@ -1,4 +1,4 @@
-export const initialInventory:Record<number,number>={42:18,43:7,44:14,45:6,46:22,47:11,48:5,49:31,50:9,51:13,52:8,53:4,54:16,55:12,56:7,57:5,58:24,59:15};
+export const initialInventory:Record<number,number>={41:18,42:7,43:14,44:6,45:12,46:22,47:11,49:31,50:9,51:13,52:8,53:4,54:16,55:12,56:7,57:5,58:24,59:15};
 
 export type InventoryStats={stock:Record<number,number>;sold:Record<number,number>;revenue:Record<number,number>};
 

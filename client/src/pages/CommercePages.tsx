@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Check, Clock3, HeartPulse, Hotel, PackageOpen, Scissors, Shield, ShoppingBag, Sparkles, X } from 'lucide-react';
+import { Check, Clock3, Hotel, PackageOpen, Scissors, Shield, ShoppingBag, Sparkles, X } from 'lucide-react';
 import { Button, Img, SectionTitle } from '../components/UI';
 import { useCart } from '../components/CartContext';
 import { readInventory, recordSale } from '../components/inventoryStore';
@@ -9,33 +9,32 @@ export const serviceData=[
  {slug:'grooming',name:'Grooming',desc:'Tắm, sấy, vệ sinh và cắt tỉa theo giống.',icon:Scissors,image:'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1000&q=85',duration:'60–120 phút',tiers:[['Silver','119.000đ','Tắm, sấy, vệ sinh tai và cắt móng'],['Gold','219.000đ','Silver + cắt tỉa tạo kiểu, dưỡng lông'],['Premium','319.000đ','Gold + massage, phục hồi lông chuyên sâu']]},
  {slug:'spa',name:'Spa',desc:'Liệu trình thư giãn, chăm sóc da và phục hồi lông.',icon:Sparkles,image:'https://images.unsplash.com/photo-1581888227599-779811939961?auto=format&fit=crop&w=1000&q=85',duration:'75–120 phút',tiers:[['Silver','119.000đ','Tắm thảo mộc và massage 15 phút'],['Gold','299.000đ','Silver + ủ dưỡng da lông chuyên sâu'],['Premium','419.000đ','Gold + liệu trình phục hồi và xịt dưỡng cao cấp']]},
  {slug:'pet-hotel',name:'Pet Hotel',desc:'Phòng riêng tiện nghi, camera và báo cáo mỗi ngày.',icon:Hotel,image:'https://images.unsplash.com/photo-1601758174114-e711c0cbaa69?auto=format&fit=crop&w=1000&q=85',duration:'Theo ngày / đêm',tiers:[['Silver','289.000đ/ngày','Phòng tiêu chuẩn, 2 bữa và 1 lần vui chơi'],['Gold','389.000đ/ngày','Phòng rộng, camera 24/7 và 2 lần vui chơi'],['Premium','519.000đ/ngày','Phòng VIP, báo cáo 3 lần/ngày, chăm sóc 1:1']]},
- {slug:'health-care',name:'Chăm sóc sức khỏe',desc:'Khám tổng quát và theo dõi sức khỏe định kỳ.',icon:HeartPulse,image:'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=1000&q=85',duration:'30–60 phút',tiers:[['Silver','189.000đ','Khám tổng quát cơ bản'],['Gold','299.000đ','Khám tổng quát + tư vấn dinh dưỡng'],['Premium','499.000đ','Gold + xét nghiệm cơ bản, hồ sơ sức khỏe số + sổ giun']]}
 ];
 
 export const productGroups=[
- {code:'G',title:'Dinh dưỡng & bổ sung',total:'926.000đ',items:[
-  [42,'Gel dinh dưỡng phổ thông','Gel dinh dưỡng Nuvita chó mèo 120g','Tuýp',99000,'Bán theo nhu cầu khách, không thay thế tư vấn thú y.'],
-  [43,'Gel dinh dưỡng cao cấp','Virbac Nutri-Plus Gel 120g','Tuýp',329000,'Dòng cao cấp, nên nhập ít để tránh tồn kho.'],
-  [44,'Gel chức năng cho mèo','Kit Cat Supplement Gel','Tuýp',129000,'Phù hợp khách nuôi mèo, có thể bán kèm pate hoặc súp thưởng.'],
-  [45,'Canxi bổ sung','PetAg Calcium Phosphorus 50 viên','Hộp',369000,'Chỉ bán như sản phẩm bổ sung theo hướng dẫn, không tư vấn như thuốc điều trị.']
+ {code:'G',title:'Dinh dưỡng & bổ sung',total:'935.000đ',items:[
+  [41,'Gel dinh dưỡng phổ thông','Gel dinh dưỡng Nuvita chó mèo 120g','Tuýp',89000,'Bán theo nhu cầu khách; không thay thế tư vấn thú y.'],
+  [42,'Gel dinh dưỡng cao cấp','Virbac Nutri-Plus Gel 120g','Tuýp',289000,'Dòng cao cấp, nhập số lượng vừa phải để tránh tồn kho.'],
+  [43,'Gel chức năng cho mèo','Kit Cat Supplement Gel','Tuýp',109000,'Phù hợp khách nuôi mèo, có thể bán kèm pate/súp thưởng.'],
+  [44,'Canxi bổ sung','PetAg Calcium Phosphorus 50 viên','Hộp',319000,'Chỉ bán như sản phẩm bổ sung theo hướng dẫn, không tư vấn như thuốc điều trị.'],
+  [45,'Sản phẩm bổ sung khác','Omega / Hairball gel / vitamin phổ thông','Sản phẩm',129000,'Mức giá tham khảo cho nhóm sản phẩm bổ sung phổ thông; khi nhập thực tế cần tách từng mã hàng.']
  ]},
- {code:'H',title:'Tẩy giun & kiểm soát ký sinh trùng',total:'3.694.000đ',items:[
-  [46,'Thuốc tẩy giun phổ thông','Bio-Rantel cho chó mèo','Hộp',89000,'Chỉ bán hoặc tư vấn theo hướng dẫn sản phẩm; trường hợp bệnh lý chuyển đối tác thú y.'],
-  [47,'Thuốc tẩy giun dạng nước','Vime Deworm dạng nước','Chai',89000,'Chỉ bán khi khách hiểu rõ cách sử dụng hoặc có hướng dẫn chuyên môn phù hợp.'],
-  [48,'Thuốc tẩy giun cho mèo','Drontal Cat 1×8','Hộp',529000,'Sản phẩm giá trị cao, nên nhập số lượng hạn chế.'],
-  [49,'Thuốc tẩy giun cho mèo','Drontal Cat viên lẻ','Viên',75000,'Phù hợp khách cần số lượng nhỏ.'],
-  [50,'Kiểm soát ký sinh trùng chó size XS','NexGard Spectra 2–3,5kg','Viên',319000,'Bán theo đúng cân nặng và hướng dẫn sản phẩm.'],
-  [51,'Kiểm soát ký sinh trùng chó size S','NexGard Spectra 3,5–7,5kg','Viên',329000,'Bán theo đúng cân nặng và hướng dẫn sản phẩm.'],
-  [52,'Kiểm soát ký sinh trùng chó size M','NexGard Spectra 7,5–15kg','Viên',429000,'Không định vị là dịch vụ điều trị thú y.'],
-  [53,'Kiểm soát ký sinh trùng chó size L','NexGard Spectra 15–30kg','Viên',539000,'Sản phẩm giá cao, nên nhập theo nhu cầu.'],
-  [54,'Kiểm soát ký sinh trùng ngoài da','NexGard 2–4kg','Viên',179000,'Bán theo cân nặng, kèm hướng dẫn sử dụng rõ ràng.'],
-  [55,'Kiểm soát ký sinh trùng ngoài da','NexGard 4–10kg','Viên',209000,'Phù hợp chó nhỏ hoặc vừa.'],
-  [56,'Kiểm soát ký sinh trùng ngoài da','NexGard 10–25kg','Viên',239000,'Phù hợp chó vừa hoặc lớn.'],
-  [57,'Kiểm soát ký sinh trùng cho mèo','Advocate Cat 3×0,4ml','Hộp',669000,'Chỉ bán theo hướng dẫn sản phẩm; ca bệnh lý nên chuyển đối tác thú y.']
+ {code:'H',title:'Tẩy giun & kiểm soát ký sinh trùng',total:'2.845.000đ',items:[
+  [46,'Tẩy giun phổ thông','Bio-Rantel cho chó mèo','Viên',30000,'Chỉ bán/tư vấn theo hướng dẫn sản phẩm; trường hợp bệnh lý chuyển đối tác thú y.'],
+  [47,'Tẩy giun dạng nước','Vime Deworm dạng nước','Chai',90000,'Phù hợp chó/mèo nhỏ hoặc khó uống viên; cần hướng dẫn sử dụng rõ ràng.'],
+  [49,'Tẩy giun cho mèo','Drontal Cat viên lẻ','Viên',65000,'Phù hợp khách cần số lượng nhỏ.'],
+  [50,'Kiểm soát ký sinh trùng chó size XS','NexGard Spectra 2–3,5kg','Viên',295000,'Bán theo đúng cân nặng và hướng dẫn sản phẩm.'],
+  [51,'Kiểm soát ký sinh trùng chó size S','NexGard Spectra 3,5–7,5kg','Viên',305000,'Phù hợp chó nhỏ; không định vị là điều trị thú y.'],
+  [52,'Kiểm soát ký sinh trùng chó size M','NexGard Spectra 7,5–15kg','Viên',389000,'Phù hợp chó vừa; bán theo hướng dẫn nhà sản xuất.'],
+  [53,'Kiểm soát ký sinh trùng chó size L','NexGard Spectra 15–30kg','Viên',489000,'Sản phẩm giá cao, nhập theo nhu cầu để tránh tồn kho.'],
+  [54,'Kiểm soát ký sinh trùng ngoài da','NexGard 2–4kg','Viên',165000,'Bán theo cân nặng, kèm hướng dẫn sử dụng rõ ràng.'],
+  [55,'Kiểm soát ký sinh trùng ngoài da','NexGard 4–10kg','Viên',189000,'Phù hợp chó nhỏ/vừa.'],
+  [56,'Kiểm soát ký sinh trùng ngoài da','NexGard 10–25kg','Viên',219000,'Phù hợp chó vừa/lớn.'],
+  [57,'Kiểm soát ký sinh trùng cho mèo','Advocate Cat 3×0,4ml','Hộp',609000,'Chỉ bán theo hướng dẫn sản phẩm; ca bệnh lý nên chuyển đối tác thú y.']
  ]},
- {code:'I',title:'Vệ sinh tai tại nhà',total:'244.000đ',items:[
-  [58,'Vệ sinh tai','Dung dịch vệ sinh tai Yoko 50ml','Chai',75000,'Bán kèm sau grooming hoặc khi khách cần chăm sóc tai tại nhà.'],
-  [59,'Vệ sinh tai','Dung dịch vệ sinh tai Forcans 100ml','Chai',169000,'Phù hợp khách muốn sản phẩm vệ sinh tai kỹ hơn.']
+ {code:'I',title:'Vệ sinh tai tại nhà',total:'214.000đ',items:[
+  [58,'Vệ sinh tai','Dung dịch vệ sinh tai Yoko 50ml','Chai',65000,'Bán kèm sau grooming hoặc cho khách tự vệ sinh tai tại nhà.'],
+  [59,'Vệ sinh tai','Dung dịch vệ sinh tai Forcans 100ml','Chai',149000,'Phù hợp khách muốn sản phẩm vệ sinh tai kỹ hơn.']
  ]}
 ];
 
@@ -44,7 +43,7 @@ function ProductCatalog(){
  const shown=productGroups.filter(x=>x.code===group);
  const add=(row:any[])=>{const id=Number(row[0]);let user:any=null;try{user=JSON.parse(localStorage.getItem('user')||'null')}catch{}if(!localStorage.getItem('token')||user?.role!=='CUSTOMER'){navigate('/login');return}if((inventory[id]||0)<=0)return;addItem({id:`product-${id}`,name:String(row[2]),variant:String(row[3]),price:Number(row[4]),description:String(row[1])});setInventory(recordSale(id,Number(row[4])).stock)};
  const stock=(id:number)=>inventory[id]||0;
- return <><button className="service-card service-card-link product-service-card" onClick={()=>setOpen(true)}><div className="service-image"><Img src="https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=900&q=85" alt="Sản phẩm dinh dưỡng và chăm sóc thú cưng"/><span><ShoppingBag/></span></div><div><h3>Sản phẩm chăm sóc</h3><p>Dinh dưỡng, kiểm soát ký sinh trùng và vệ sinh tai tại nhà.</p><p className="duration"><PackageOpen/> 18 sản phẩm chính hãng</p><b>Từ 75.000đ</b></div></button>{open&&<div className="product-popup" onClick={()=>setOpen(false)}><div onClick={e=>e.stopPropagation()}><button className="product-popup-close" onClick={()=>setOpen(false)}><X/></button><span className="eyebrow">DANH MỤC SẢN PHẨM CHĂM SÓC</span><h2>Dinh dưỡng và chăm sóc tại nhà</h2><p>Sử dụng theo đúng cân nặng, nhu cầu và hướng dẫn nhà sản xuất; không thay thế chẩn đoán hoặc điều trị thú y.</p><div className="product-filter">{productGroups.map(x=><button className={group===x.code?'active':''} onClick={()=>setGroup(x.code)} key={x.code}><span><b>{x.title}</b><small>{x.items.length} sản phẩm</small></span></button>)}</div>{shown.map(g=><div className="product-group" key={g.code}><div className="product-group-head"><PackageOpen/><div><h3>{g.title}</h3><p>{g.items.length} sản phẩm · Tổng giá tham khảo: <b>{g.total}</b></p></div></div><div className="product-table-wrap"><table><thead><tr><th>Loại sản phẩm</th><th>Tên sản phẩm</th><th>Quy cách</th><th>Giá</th><th>Tồn kho</th><th>Lưu ý</th><th></th></tr></thead><tbody>{g.items.map((row:any[])=><tr key={row[0]}><td><b>{row[1]}</b></td><td>{row[2]}</td><td>{row[3]}</td><td><strong>{Number(row[4]).toLocaleString('vi-VN')}đ</strong></td><td><span className={`product-stock ${stock(Number(row[0]))<=5?'low':''}`}>{stock(Number(row[0]))>0?`Còn ${stock(Number(row[0]))} sản phẩm`:'Hết hàng'}</span></td><td><small>{row[5]}</small></td><td><button disabled={stock(Number(row[0]))===0} onClick={()=>add(row)}><ShoppingBag/> {stock(Number(row[0]))===0?'Hết hàng':'Thêm vào giỏ'}</button></td></tr>)}</tbody></table></div></div>)}</div></div>}</>
+ return <><button className="service-card service-card-link product-service-card" onClick={()=>setOpen(true)}><div className="service-image"><Img src="https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=900&q=85" alt="Sản phẩm dinh dưỡng và chăm sóc thú cưng"/><span><ShoppingBag/></span></div><div><h3>Sản phẩm chăm sóc</h3><p>Dinh dưỡng, kiểm soát ký sinh trùng và vệ sinh tai tại nhà.</p><p className="duration"><PackageOpen/> 18 sản phẩm chính hãng</p><b>Từ 30.000đ</b></div></button>{open&&<div className="product-popup" onClick={()=>setOpen(false)}><div onClick={e=>e.stopPropagation()}><button className="product-popup-close" onClick={()=>setOpen(false)}><X/></button><span className="eyebrow">DANH MỤC SẢN PHẨM CHĂM SÓC</span><h2>Dinh dưỡng và chăm sóc tại nhà</h2><p>Sử dụng theo đúng cân nặng, nhu cầu và hướng dẫn nhà sản xuất; không thay thế chẩn đoán hoặc điều trị thú y.</p><div className="product-filter">{productGroups.map(x=><button className={group===x.code?'active':''} onClick={()=>setGroup(x.code)} key={x.code}><span><b>{x.title}</b><small>{x.items.length} sản phẩm</small></span></button>)}</div>{shown.map(g=><div className="product-group" key={g.code}><div className="product-group-head"><PackageOpen/><div><h3>{g.title}</h3><p>{g.items.length} sản phẩm · Tổng giá tham khảo: <b>{g.total}</b></p></div></div><div className="product-table-wrap"><table><thead><tr><th>Loại sản phẩm</th><th>Tên sản phẩm</th><th>Quy cách</th><th>Giá</th><th>Tồn kho</th><th>Lưu ý</th><th></th></tr></thead><tbody>{g.items.map((row:any[])=><tr key={row[0]}><td><b>{row[1]}</b></td><td>{row[2]}</td><td>{row[3]}</td><td><strong>{Number(row[4]).toLocaleString('vi-VN')}đ</strong></td><td><span className={`product-stock ${stock(Number(row[0]))<=5?'low':''}`}>{stock(Number(row[0]))>0?`Còn ${stock(Number(row[0]))} sản phẩm`:'Hết hàng'}</span></td><td><small>{row[5]}</small></td><td><button disabled={stock(Number(row[0]))===0} onClick={()=>add(row)}><ShoppingBag/> {stock(Number(row[0]))===0?'Hết hàng':'Thêm vào giỏ'}</button></td></tr>)}</tbody></table></div></div>)}</div></div>}</>
 }
 
 export function Services(){return <><PageHero tag="DỊCH VỤ & BẢNG GIÁ" title="Chọn dịch vụ phù hợp cho bé" desc="Xem dịch vụ chăm sóc, sản phẩm dinh dưỡng và đồ dùng hỗ trợ với mức giá rõ ràng."/><section className="section"><div className="services-grid">{serviceData.map(s=>{const I=s.icon;return <Link className="service-card service-card-link" to={`/services/${s.slug}`} key={s.slug}><div className="service-image"><Img src={s.image} alt={s.name}/><span><I/></span></div><div><h3>{s.name}</h3><p>{s.desc}</p><p className="duration"><Clock3/> {s.duration}</p><b>Từ {s.tiers[0][1]}</b><span className="service-open">Xem 3 mức giá →</span></div></Link>})}<ProductCatalog/></div></section></>}
