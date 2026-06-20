@@ -10,4 +10,6 @@ import './hotel.css';
 import './about.css';
 import './about-overrides.css';
 import './theme.css';
+import './commerce.css';
+import './commerce-overrides.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><BrowserRouter><App /></BrowserRouter></React.StrictMode>);

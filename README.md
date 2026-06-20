@@ -1,4 +1,4 @@
-# PetTech Care Center
+# PAWFECT Care Center
 
 Website full-stack tiếng Việt cho hệ sinh thái chăm sóc thú cưng công nghệ cao: website giới thiệu, booking nhiều bước, hồ sơ sức khỏe điện tử, QR khẩn cấp, theo dõi lưu trú/camera mô phỏng và dashboard theo 3 vai trò.
 

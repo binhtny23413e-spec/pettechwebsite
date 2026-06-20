@@ -2,7 +2,7 @@ import { FormEvent, useMemo, useState } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, ChevronLeft, ChevronRight, CreditCard, PawPrint, ShieldCheck } from 'lucide-react';
 import { api } from '../services/api';
-import { serviceData } from './PublicPages';
+import { serviceData } from './CommercePages';
 
 export function Login({register=false}:{register?:boolean}) {
   const nav=useNavigate();

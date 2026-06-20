@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 export default function InteractionRouter(){
  const navigate=useNavigate();
  useEffect(()=>{
-  const removeBirdOptions=()=>document.querySelectorAll('option').forEach(option=>{if(option.textContent?.trim()==='Chim')option.remove()});
-  removeBirdOptions();
-  const observer=new MutationObserver(removeBirdOptions);
+  const syncBrandAndOptions=()=>{document.querySelectorAll('option').forEach(option=>{if(option.textContent?.trim()==='Chim')option.remove()});const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let node;while(node=walker.nextNode()){if(node.nodeValue?.includes('PetTech')||node.nodeValue?.includes('PETTECH'))node.nodeValue=node.nodeValue.replace(/PetTech/g,'PAWFECT').replace(/PETTECH/g,'PAWFECT')}};
+  syncBrandAndOptions();
+  const observer=new MutationObserver(syncBrandAndOptions);
   observer.observe(document.body,{childList:true,subtree:true});
   const click=(event:MouseEvent)=>{
    const anchor=(event.target as HTMLElement).closest('a.side-link');
