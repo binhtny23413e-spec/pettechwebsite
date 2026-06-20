@@ -15,6 +15,7 @@ export function Button({to,children,variant='primary'}:{to:string;children:React
   const parsePrice=(text:string)=>Number((text.match(/[\d.,]+/)?.[0]||'0').replace(/[.,]/g,''));
   const addCommerceItem=(e:MouseEvent<HTMLAnchorElement>)=>{
     if(to!=='/booking')return;
+    if(!localStorage.getItem('token'))return;
     const el=e.currentTarget;
     const combo=el.closest('.combo');
     const term=el.closest('.term-options article');
