@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BarChart3, CalendarDays, CheckCircle2, CircleDollarSign, Clock3, PawPrint, Search, Settings, Sparkles, TrendingUp, Users, WalletCards } from 'lucide-react';
+import { BarChart3, CalendarDays, CheckCircle2, CircleDollarSign, Clock3, Hotel, PawPrint, Search, Settings, Sparkles, TrendingUp, Users, WalletCards } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 
 type Order={id:number;serviceType:string;date:string;time:string;note?:string;status:string;paymentStatus:string;totalPrice:number;user?:{name:string};pet?:{name:string};payment?:{method:string;amount:number;status:string};demo?:boolean};
 const statusText:Record<string,string>={PENDING:'Chờ xác nhận',CONFIRMED:'Đã xác nhận',IN_PROGRESS:'Đang phục vụ',COMPLETED:'Hoàn thành',CANCELLED:'Đã hủy'};
 const money=(n:number)=>`${Math.round(n).toLocaleString('vi-VN')}đ`;
-const nav=[[BarChart3,'Tổng quan','/admin'],[CalendarDays,'Đơn hàng','/admin/orders'],[Users,'Khách hàng','/admin/customers'],[PawPrint,'Thú cưng','/admin/pets'],[CircleDollarSign,'Doanh thu','/admin/finance'],[WalletCards,'Chi phí','/admin/expenses'],[Sparkles,'Combo','/admin/memberships'],[TrendingUp,'Analytics','/admin/analytics']];
+const nav=[[BarChart3,'Tổng quan','/admin'],[CalendarDays,'Đơn hàng','/admin/orders'],[Users,'Khách hàng','/admin/customers'],[PawPrint,'Thú cưng','/admin/pets'],[Hotel,'Pet Hotel','/admin/hotel'],[CircleDollarSign,'Doanh thu','/admin/finance'],[WalletCards,'Chi phí','/admin/expenses'],[Sparkles,'Combo','/admin/memberships'],[TrendingUp,'Analytics','/admin/analytics']];
 const samples:Order[]=[
   {id:-1001,user:{name:'Nguyễn Minh Anh'},pet:{name:'Mochi'},serviceType:'Grooming · Gold × 1',date:'2026-06-20',time:'09:30',status:'CONFIRMED',paymentStatus:'PAID',totalPrice:236520,payment:{method:'MoMo',amount:236520,status:'PAID'},demo:true},
   {id:-1002,user:{name:'Quang Huy'},pet:{name:'Bella'},serviceType:'Pet Hotel · Gold × 3',date:'2026-06-20',time:'08:00',status:'IN_PROGRESS',paymentStatus:'PAID',totalPrice:1260360,payment:{method:'ZaloPay',amount:1260360,status:'PAID'},demo:true},
