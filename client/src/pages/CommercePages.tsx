@@ -1,6 +1,8 @@
-import { Link, useParams } from 'react-router-dom';
-import { Check, Clock3, HeartPulse, Hotel, Scissors, Shield, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Check, Clock3, HeartPulse, Hotel, PackageOpen, Scissors, Shield, ShoppingBag, Sparkles } from 'lucide-react';
 import { Button, Img, SectionTitle } from '../components/UI';
+import { useCart } from '../components/CartContext';
 
 export const serviceData=[
  {slug:'grooming',name:'Grooming',desc:'Tắm, sấy, vệ sinh và cắt tỉa theo giống.',icon:Scissors,image:'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1000&q=85',duration:'60–120 phút',tiers:[['Silver','119.000đ','Tắm, sấy, vệ sinh tai và cắt móng'],['Gold','219.000đ','Silver + cắt tỉa tạo kiểu, dưỡng lông'],['Premium','319.000đ','Gold + massage, phục hồi lông chuyên sâu']]},
@@ -9,7 +11,41 @@ export const serviceData=[
  {slug:'health-care',name:'Chăm sóc sức khỏe',desc:'Khám tổng quát và theo dõi sức khỏe định kỳ.',icon:HeartPulse,image:'https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&w=1000&q=85',duration:'30–60 phút',tiers:[['Silver','189.000đ','Khám tổng quát cơ bản'],['Gold','299.000đ','Khám tổng quát + tư vấn dinh dưỡng'],['Premium','499.000đ','Gold + xét nghiệm cơ bản, hồ sơ sức khỏe số + sổ giun']]}
 ];
 
-export function Services(){return <><PageHero tag="DỊCH VỤ & BẢNG GIÁ" title="Chọn dịch vụ phù hợp cho bé" desc="Bấm vào từng dịch vụ để xem quy trình và ba mức giá Silver, Gold, Premium."/><section className="section"><div className="services-grid">{serviceData.map(s=>{const I=s.icon;return <Link className="service-card service-card-link" to={`/services/${s.slug}`} key={s.slug}><div className="service-image"><Img src={s.image} alt={s.name}/><span><I/></span></div><div><h3>{s.name}</h3><p>{s.desc}</p><p className="duration"><Clock3/> {s.duration}</p><b>Từ {s.tiers[0][1]}</b><span className="service-open">Xem 3 mức giá →</span></div></Link>})}</div></section></>}
+const productGroups=[
+ {code:'G',title:'Thực phẩm bổ sung và sản phẩm hỗ trợ dinh dưỡng',total:'926.000đ',items:[
+  [42,'Gel dinh dưỡng phổ thông','Gel dinh dưỡng Nuvita chó mèo 120g','Tuýp',99000,'Bán theo nhu cầu khách, không thay thế tư vấn thú y.'],
+  [43,'Gel dinh dưỡng cao cấp','Virbac Nutri-Plus Gel 120g','Tuýp',329000,'Dòng cao cấp, nên nhập ít để tránh tồn kho.'],
+  [44,'Gel chức năng cho mèo','Kit Cat Supplement Gel','Tuýp',129000,'Phù hợp khách nuôi mèo, có thể bán kèm pate hoặc súp thưởng.'],
+  [45,'Canxi bổ sung','PetAg Calcium Phosphorus 50 viên','Hộp',369000,'Chỉ bán như sản phẩm bổ sung theo hướng dẫn, không tư vấn như thuốc điều trị.']
+ ]},
+ {code:'H',title:'Sản phẩm bán kèm theo hướng dẫn nhà sản xuất',total:'3.694.000đ',items:[
+  [46,'Thuốc tẩy giun phổ thông','Bio-Rantel cho chó mèo','Hộp',89000,'Chỉ bán hoặc tư vấn theo hướng dẫn sản phẩm; trường hợp bệnh lý chuyển đối tác thú y.'],
+  [47,'Thuốc tẩy giun dạng nước','Vime Deworm dạng nước','Chai',89000,'Chỉ bán khi khách hiểu rõ cách sử dụng hoặc có hướng dẫn chuyên môn phù hợp.'],
+  [48,'Thuốc tẩy giun cho mèo','Drontal Cat 1×8','Hộp',529000,'Sản phẩm giá trị cao, nên nhập số lượng hạn chế.'],
+  [49,'Thuốc tẩy giun cho mèo','Drontal Cat viên lẻ','Viên',75000,'Phù hợp khách cần số lượng nhỏ.'],
+  [50,'Kiểm soát ký sinh trùng chó size XS','NexGard Spectra 2–3,5kg','Viên',319000,'Bán theo đúng cân nặng và hướng dẫn sản phẩm.'],
+  [51,'Kiểm soát ký sinh trùng chó size S','NexGard Spectra 3,5–7,5kg','Viên',329000,'Bán theo đúng cân nặng và hướng dẫn sản phẩm.'],
+  [52,'Kiểm soát ký sinh trùng chó size M','NexGard Spectra 7,5–15kg','Viên',429000,'Không định vị là dịch vụ điều trị thú y.'],
+  [53,'Kiểm soát ký sinh trùng chó size L','NexGard Spectra 15–30kg','Viên',539000,'Sản phẩm giá cao, nên nhập theo nhu cầu.'],
+  [54,'Kiểm soát ký sinh trùng ngoài da','NexGard 2–4kg','Viên',179000,'Bán theo cân nặng, kèm hướng dẫn sử dụng rõ ràng.'],
+  [55,'Kiểm soát ký sinh trùng ngoài da','NexGard 4–10kg','Viên',209000,'Phù hợp chó nhỏ hoặc vừa.'],
+  [56,'Kiểm soát ký sinh trùng ngoài da','NexGard 10–25kg','Viên',239000,'Phù hợp chó vừa hoặc lớn.'],
+  [57,'Kiểm soát ký sinh trùng cho mèo','Advocate Cat 3×0,4ml','Hộp',669000,'Chỉ bán theo hướng dẫn sản phẩm; ca bệnh lý nên chuyển đối tác thú y.']
+ ]},
+ {code:'I',title:'Sản phẩm vệ sinh tai bán kèm',total:'244.000đ',items:[
+  [58,'Vệ sinh tai','Dung dịch vệ sinh tai Yoko 50ml','Chai',75000,'Bán kèm sau grooming hoặc khi khách cần chăm sóc tai tại nhà.'],
+  [59,'Vệ sinh tai','Dung dịch vệ sinh tai Forcans 100ml','Chai',169000,'Phù hợp khách muốn sản phẩm vệ sinh tai kỹ hơn.']
+ ]}
+];
+
+function ProductCatalog(){
+ const [group,setGroup]=useState('Tất cả');const {addItem}=useCart();const navigate=useNavigate();
+ const shown=productGroups.filter(x=>group==='Tất cả'||x.code===group);
+ const add=(row:any[])=>{let user:any=null;try{user=JSON.parse(localStorage.getItem('user')||'null')}catch{}if(!localStorage.getItem('token')||user?.role!=='CUSTOMER'){navigate('/login');return}addItem({id:`product-${row[0]}`,name:String(row[2]),variant:String(row[3]),price:Number(row[4]),description:String(row[1])})};
+ return <section className="section product-catalog"><SectionTitle eyebrow="SẢN PHẨM BÁN KÈM · G–H–I" title="Dinh dưỡng và chăm sóc tại nhà" desc="Sản phẩm hỗ trợ được bán theo đúng cân nặng, nhu cầu và hướng dẫn của nhà sản xuất; không thay thế chẩn đoán hoặc điều trị thú y."/><div className="product-filter"><button className={group==='Tất cả'?'active':''} onClick={()=>setGroup('Tất cả')}>Tất cả · 18</button>{productGroups.map(x=><button className={group===x.code?'active':''} onClick={()=>setGroup(x.code)} key={x.code}>{x.code} · {x.items.length} sản phẩm</button>)}</div>{shown.map(g=><div className="product-group" key={g.code}><div className="product-group-head"><span>{g.code}</span><div><h3>{g.title}</h3><p>Tổng giá tham khảo toàn nhóm: <b>{g.total}</b></p></div><PackageOpen/></div><div className="product-table-wrap"><table><thead><tr><th>STT</th><th>Loại sản phẩm</th><th>Tên sản phẩm</th><th>Quy cách</th><th>Giá</th><th>Lưu ý</th><th></th></tr></thead><tbody>{g.items.map((row:any[])=><tr key={row[0]}><td>{row[0]}</td><td><b>{row[1]}</b></td><td>{row[2]}</td><td>{row[3]}</td><td><strong>{Number(row[4]).toLocaleString('vi-VN')}đ</strong></td><td><small>{row[5]}</small></td><td><button onClick={()=>add(row)}><ShoppingBag/> Thêm vào giỏ</button></td></tr>)}</tbody></table></div></div>)}</section>
+}
+
+export function Services(){return <><PageHero tag="DỊCH VỤ & BẢNG GIÁ" title="Chọn dịch vụ phù hợp cho bé" desc="Xem dịch vụ chăm sóc, sản phẩm dinh dưỡng và đồ dùng hỗ trợ với mức giá rõ ràng."/><section className="section"><div className="services-grid">{serviceData.map(s=>{const I=s.icon;return <Link className="service-card service-card-link" to={`/services/${s.slug}`} key={s.slug}><div className="service-image"><Img src={s.image} alt={s.name}/><span><I/></span></div><div><h3>{s.name}</h3><p>{s.desc}</p><p className="duration"><Clock3/> {s.duration}</p><b>Từ {s.tiers[0][1]}</b><span className="service-open">Xem 3 mức giá →</span></div></Link>})}</div></section><ProductCatalog/></>}
 export function ServiceDetail(){const {slug}=useParams();const s=serviceData.find(x=>x.slug===slug)||serviceData[0];const I=s.icon;return <><section className="service-detail-hero"><div><span className="eyebrow">DỊCH VỤ PAWFECT</span><h1>{s.name}</h1><p>{s.desc} Mỗi bước đều được ghi nhận để chủ nuôi dễ dàng theo dõi.</p><div><span><Clock3/> {s.duration}</span><span><Shield/> Quy trình an toàn</span></div><Button to="/booking">Chọn dịch vụ này</Button></div><Img src={s.image} alt={s.name}/></section><section className="section detail-process"><SectionTitle eyebrow="QUY TRÌNH DỊCH VỤ" title="Bé sẽ được chăm sóc như thế nào?"/><div className="four-grid">{[['01','Tiếp nhận & tư vấn','Kiểm tra tình trạng, thói quen và ghi nhận yêu cầu riêng.'],['02','Thực hiện dịch vụ','Chuyên viên tiến hành theo đúng cấp độ đã chọn.'],['03','Kiểm tra chất lượng','Đánh giá kết quả, sức khỏe và mức độ thoải mái của bé.'],['04','Bàn giao & báo cáo','Gửi hình ảnh, lưu hồ sơ và hướng dẫn chăm sóc tại nhà.']].map(x=><div className="number-card" key={x[0]}><span>{x[0]}</span><h3>{x[1]}</h3><p>{x[2]}</p></div>)}</div></section><section className="section tier-section"><SectionTitle eyebrow="3 CẤP ĐỘ CHĂM SÓC" title={`Chọn gói ${s.name} phù hợp`}/><div className="tier-grid">{s.tiers.map((t,i)=><div className={i===1?'tier featured':'tier'} key={t[0]}><span>{i===1?'ĐƯỢC CHỌN NHIỀU':'GÓI DỊCH VỤ'}</span><I/><h3>{t[0]}</h3><b>{t[1]}</b><p>{t[2]}</p><ul><li><Check/> Tư vấn trước dịch vụ</li><li><Check/> Ảnh cập nhật sau hoàn thành</li><li><Check/> Lưu vào hồ sơ chăm sóc</li></ul><Button to="/booking" variant={i===1?'primary':'outline'}>Chọn {t[0]}</Button></div>)}</div></section></>}
 export function Pricing(){return <><PageHero tag="BẢNG GIÁ DỊCH VỤ" title="Giá rõ ràng cho từng cấp độ chăm sóc" desc="Silver cho nhu cầu cơ bản, Gold cân bằng quyền lợi và Premium cho trải nghiệm toàn diện."/><section className="section pricing-detail"><div className="pricing-legend"><span><b>Silver</b>Tiết kiệm, đủ nhu cầu cơ bản</span><span><b>Gold</b>Nâng cao, được chọn nhiều nhất</span><span><b>Premium</b>Chăm sóc toàn diện</span></div>{serviceData.map(s=>{const I=s.icon;return <div className="pricing-service" key={s.slug}><div className="pricing-name"><I/><div><h3>Bảng giá dịch vụ {s.name}</h3><p>{s.duration}</p></div><Button to={`/services/${s.slug}`} variant="text">Xem chi tiết</Button></div><div className="pricing-tiers">{s.tiers.map((t,i)=><div className={i===1?'best':''} key={t[0]}><span>{t[0]}</span><b>{t[1]}</b><p>{t[2]}</p><Button to="/booking" variant={i===1?'primary':'outline'}>Chọn gói</Button></div>)}</div></div>})}</section></>}
 
