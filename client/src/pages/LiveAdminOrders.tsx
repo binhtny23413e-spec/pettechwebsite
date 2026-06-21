@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BarChart3, CalendarDays, CheckCircle2, CircleDollarSign, Clock3, Hotel, PackageOpen, PawPrint, Search, Settings, Sparkles, TrendingUp, UserRound, Users, WalletCards } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { BarChart3, CalendarDays, CheckCircle2, CircleDollarSign, Clock3, Hotel, LogOut, PackageOpen, PawPrint, Search, Settings, Sparkles, TrendingUp, UserRound, Users, WalletCards } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 
 type Order={id:number;serviceType:string;date:string;time:string;note?:string;status:string;paymentStatus:string;totalPrice:number;subtotal?:number;vat?:number;hotelCheckIn?:string;hotelCheckOut?:string;hotelDays?:number;user?:{name:string};pet?:{name:string};payment?:{method:string;amount:number;status:string};demo?:boolean;localFallback?:boolean};
@@ -47,6 +47,7 @@ const samples:Order[]=[
 ];
 
 export default function LiveAdminOrders(){
+  const navigate=useNavigate();
   const [liveOrders,setLiveOrders]=useState<Order[]>([]); const [query,setQuery]=useState(''); const [status,setStatus]=useState('Tất cả'); const [selected,setSelected]=useState<Order|null>(null);
   const [demoStatus,setDemoStatus]=useState<Record<number,string>>({});
   useEffect(()=>{let local:Order[]=[];try{local=JSON.parse(localStorage.getItem('pawfect-local-orders')||'[]')}catch{}api('/bookings').then(remote=>setLiveOrders([...local,...remote])).catch(()=>setLiveOrders(local))},[]);
@@ -56,7 +57,7 @@ export default function LiveAdminOrders(){
   const summary=useMemo(()=>({total:orders.reduce((sum,x)=>sum+x.totalPrice,0),pending:orders.filter(x=>x.status==='PENDING').length,active:orders.filter(x=>['CONFIRMED','IN_PROGRESS'].includes(x.status)).length,done:orders.filter(x=>x.status==='COMPLETED').length}),[liveOrders,demoStatus]);
   const updateStatus=async(order:Order,next:string)=>{if(order.demo){setDemoStatus(old=>({...old,[order.id]:next}));return}setLiveOrders(old=>old.map(x=>x.id===order.id?{...x,status:next}:x));try{await api(`/bookings/${order.id}`,{method:'PUT',body:JSON.stringify({status:next})})}catch{}};
   const code=(order:Order)=>order.demo?`PT-${String(Math.abs(order.id)).slice(-4)}`:`PF-${String(order.id).padStart(5,'0')}`;
-  return <div className="dash admin-system"><aside><Link className="logo" to="/"><span><PawPrint/></span><b>PAWFECT<small>CARE CENTER</small></b></Link><p className="role">QUẢN TRỊ VIÊN</p>{nav.map(([Icon,label,path]:any)=><Link className={`side-link ${label==='Đơn hàng'?'active':''}`} to={path} key={label}><Icon/>{label}</Link>)}<div className="side-bottom"><Link className="side-link" to="/admin/settings"><Settings/> Cài đặt hệ thống</Link></div></aside><div className="dash-main"><div className="dash-top"><div className="dash-search"><Search/>Tìm kiếm trong hệ thống...</div></div><div className="dash-content">
+  return <div className="dash admin-system"><aside><Link className="logo" to="/"><span><PawPrint/></span><b>PAWFECT<small>CARE CENTER</small></b></Link><p className="role">QUẢN TRỊ VIÊN</p>{nav.map(([Icon,label,path]:any)=><Link className={`side-link ${label==='Đơn hàng'?'active':''}`} to={path} key={label}><Icon/>{label}</Link>)}<div className="side-bottom"><Link className="side-link" to="/admin/settings"><Settings/> Cài đặt hệ thống</Link><button onClick={()=>{localStorage.clear();navigate('/')}}><LogOut/> Đăng xuất</button></div></aside><div className="dash-main"><div className="dash-top"><div className="dash-search"><Search/>Tìm kiếm trong hệ thống...</div></div><div className="dash-content">
     <div className="welcome admin-head"><div><p>VẬN HÀNH</p><h1>Quản lý đơn hàng</h1><span>Đơn thật được đồng bộ từ giỏ hàng và hiển thị cùng dữ liệu mẫu vận hành.</span></div></div>
     <div className="order-kpis"><article><span><CalendarDays/></span><small>Tổng đơn hàng</small><b>{orders.length}</b><em>Gồm {syncedLiveOrders.length} đơn thực tế</em></article><article><span><CircleDollarSign/></span><small>Tổng giá trị đơn hàng</small><b>{money(summary.total)}</b><em>Đã bao gồm VAT 8%</em></article><article><span><Clock3/></span><small>Chờ / đang xử lý</small><b>{summary.pending+summary.active}</b><em>{summary.pending} đơn chờ xác nhận</em></article><article><span><CheckCircle2/></span><small>Đã hoàn thành</small><b>{summary.done}</b><em>Đơn phục vụ thành công</em></article></div>
     <div className="admin-filter"><div><Search/><input placeholder="Tìm mã đơn, khách hàng, thú cưng..." value={query} onChange={e=>setQuery(e.target.value)}/></div><select value={status} onChange={e=>setStatus(e.target.value)}><option>Tất cả</option><option>Chờ xác nhận</option><option>Đã xác nhận</option><option>Đang phục vụ</option><option>Hoàn thành</option><option>Đã hủy</option></select></div>
