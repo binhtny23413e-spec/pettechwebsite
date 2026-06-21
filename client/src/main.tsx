@@ -20,4 +20,5 @@ import './cart.css';
 import './hotel-tracking.css';
 import './staff-portal.css';
 import './workforce.css';
+import './feedback.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><BrowserRouter><CartProvider><App /></CartProvider></BrowserRouter></React.StrictMode>);
