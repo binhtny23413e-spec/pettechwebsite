@@ -4,7 +4,7 @@ import { BarChart3, CalendarDays, CircleDollarSign, Hotel, PackageOpen, PawPrint
 import { productGroups } from './CommercePages';
 import { changeStock, readInventory } from '../components/inventoryStore';
 
-const nav=[[BarChart3,'Tổng quan','/admin'],[CalendarDays,'Đơn hàng','/admin/orders'],[Users,'Khách hàng','/admin/customers'],[PawPrint,'Thú cưng','/admin/pets'],[UserRound,'Nhân viên & Ca làm','/admin/staff'],[Hotel,'Pet Hotel','/admin/hotel'],[PackageOpen,'Kho sản phẩm','/admin/inventory'],[CircleDollarSign,'Doanh thu','/admin/finance'],[WalletCards,'Chi phí','/admin/expenses'],[Sparkles,'Combo','/admin/memberships'],[TrendingUp,'Analytics','/admin/analytics']];
+const nav=[[BarChart3,'Tổng quan','/admin'],[CalendarDays,'Đơn hàng','/admin/orders'],[Users,'Khách hàng','/admin/customers'],[PawPrint,'Thú cưng','/admin/pets'],[UserRound,'Nhân viên & Ca làm','/admin/staff'],[Hotel,'Pet Hotel','/admin/hotel'],[PackageOpen,'Kho sản phẩm','/admin/inventory'],[WalletCards,'Chi phí','/admin/expenses'],[Sparkles,'Combo','/admin/memberships'],[TrendingUp,'Analytics','/admin/analytics']];
 const products=productGroups.flatMap(group=>group.items.map((row:any[])=>({id:Number(row[0]),category:group.title,type:String(row[1]),name:String(row[2]),price:Number(row[4])})));
 const money=(n:number)=>`${n.toLocaleString('vi-VN')}đ`;
 

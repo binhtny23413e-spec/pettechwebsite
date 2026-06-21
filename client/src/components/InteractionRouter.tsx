@@ -16,7 +16,7 @@ export default function InteractionRouter(){
    const anchor=(event.target as HTMLElement).closest('a.side-link');
    if(anchor&&window.location.pathname==='/admin'){
     const label=anchor.textContent?.trim()||'';
-    const adminRoutes:Record<string,string>={'Khách hàng':'/admin/customers','Thú cưng':'/admin/pets','Booking':'/admin/orders','Đơn hàng':'/admin/orders','Nhân viên & Ca làm':'/admin/staff','Pet Hotel':'/admin/hotel','Kho sản phẩm':'/admin/inventory','Doanh thu':'/admin/finance','Chi phí':'/admin/expenses','Membership':'/admin/memberships','Combo':'/admin/memberships','Analytics':'/admin/analytics'};
+    const adminRoutes:Record<string,string>={'Khách hàng':'/admin/customers','Thú cưng':'/admin/pets','Booking':'/admin/orders','Đơn hàng':'/admin/orders','Nhân viên & Ca làm':'/admin/staff','Pet Hotel':'/admin/hotel','Kho sản phẩm':'/admin/inventory','Doanh thu':'/admin','Chi phí':'/admin/expenses','Membership':'/admin/memberships','Combo':'/admin/memberships','Analytics':'/admin/analytics'};
     if(adminRoutes[label]){event.preventDefault();navigate(adminRoutes[label]);return}
    }
    const button=(event.target as HTMLElement).closest('button');if(!button)return;
