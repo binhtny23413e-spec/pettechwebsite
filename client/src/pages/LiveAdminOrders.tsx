@@ -3,7 +3,7 @@ import { BarChart3, CalendarDays, CheckCircle2, CircleDollarSign, Clock3, Hotel,
 import { Link } from 'react-router-dom';
 import { api } from '../services/api';
 
-type Order={id:number;serviceType:string;date:string;time:string;note?:string;status:string;paymentStatus:string;totalPrice:number;subtotal?:number;vat?:number;hotelCheckIn?:string;hotelCheckOut?:string;hotelDays?:number;user?:{name:string};pet?:{name:string};payment?:{method:string;amount:number;status:string};demo?:boolean};
+type Order={id:number;serviceType:string;date:string;time:string;note?:string;status:string;paymentStatus:string;totalPrice:number;subtotal?:number;vat?:number;hotelCheckIn?:string;hotelCheckOut?:string;hotelDays?:number;user?:{name:string};pet?:{name:string};payment?:{method:string;amount:number;status:string};demo?:boolean;localFallback?:boolean};
 const statusText:Record<string,string>={PENDING:'Chờ xác nhận',CONFIRMED:'Đã xác nhận',IN_PROGRESS:'Đang phục vụ',COMPLETED:'Hoàn thành',CANCELLED:'Đã hủy'};
 const money=(n:number)=>`${Math.round(n).toLocaleString('vi-VN')}đ`;
 const currentServicePrices:Record<string,Record<string,number>>={
@@ -49,7 +49,7 @@ const samples:Order[]=[
 export default function LiveAdminOrders(){
   const [liveOrders,setLiveOrders]=useState<Order[]>([]); const [query,setQuery]=useState(''); const [status,setStatus]=useState('Tất cả'); const [selected,setSelected]=useState<Order|null>(null);
   const [demoStatus,setDemoStatus]=useState<Record<number,string>>({});
-  useEffect(()=>{api('/bookings').then(setLiveOrders).catch(()=>setLiveOrders([]))},[]);
+  useEffect(()=>{let local:Order[]=[];try{local=JSON.parse(localStorage.getItem('pawfect-local-orders')||'[]')}catch{}api('/bookings').then(remote=>setLiveOrders([...local,...remote])).catch(()=>setLiveOrders(local))},[]);
   const syncedLiveOrders=liveOrders.map(syncLegacyOrderPrice).filter((x):x is Order=>x!==null);
   const orders=[...syncedLiveOrders,...samples.map(x=>({...x,status:demoStatus[x.id]||x.status}))];
   const shown=orders.filter(x=>(status==='Tất cả'||statusText[x.status]===status)&&`${x.id} ${x.user?.name} ${x.pet?.name} ${x.serviceType}`.toLowerCase().includes(query.toLowerCase()));
